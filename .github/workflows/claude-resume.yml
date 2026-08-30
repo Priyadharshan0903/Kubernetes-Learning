@@ -8,7 +8,15 @@ on:
         required: false
         default: Hi da machi!! Wake up!!
   schedule:
-    - cron: '0 * * * *'
+    # Off-peak minute: minute 0 is the most congested slot on GitHub's
+    # scheduler, where runs are delayed and sometimes dropped outright.
+    - cron: '23 * * * *'
+
+# A run that is waiting on a usage-limit reset can outlive the hour, so serialise
+# runs instead of letting one blocked run accumulate an hourly backlog behind it.
+concurrency:
+  group: claude-worker
+  cancel-in-progress: false
 
 jobs:
   claude-worker:
