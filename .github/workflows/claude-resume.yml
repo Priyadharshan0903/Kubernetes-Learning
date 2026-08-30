@@ -8,7 +8,7 @@ on:
         required: false
         default: Hi da machi!! Wake up!!
   schedule:
-    - cron: '0 0 * * *'
+    - cron: '0 * * * *'
 
 jobs:
   claude-worker:
