@@ -2,6 +2,11 @@ name: Claude worker
 
 on:
   workflow_dispatch:
+    inputs:
+      prompt:
+        description: Prompt to send to Claude
+        required: false
+        default: Hi da machi!! Wake up!!
 
 jobs:
   claude-worker:
@@ -12,10 +17,13 @@ jobs:
       - uses: actions/checkout@v4
 
       - name: Install Claude Code
-        run: npm i -g @anthropic-ai/claude-code
+        run: |
+          npm i -g @anthropic-ai/claude-code
+          claude --version
 
       - name: Run Claude
         env:
           CLAUDE_CODE_OAUTH_TOKEN: ${{ secrets.CLAUDE_CODE_OAUTH_TOKEN }}
+          CLAUDE_PROMPT: ${{ inputs.prompt }}
         run: |
-          ./scripts/run-claude.sh
+          bash ./scripts/run-claude.sh
