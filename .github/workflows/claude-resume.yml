@@ -25,14 +25,7 @@ jobs:
 
       - name: Run Claude
         env:
-          # Raw, because pasting into the GitHub secrets box can introduce a
-          # line wrap that gets saved as part of the value. Tokens never
-          # legitimately contain whitespace, so strip it before use.
-          CLAUDE_CODE_OAUTH_TOKEN_RAW: ${{ secrets.CLAUDE_CODE_OAUTH_TOKEN }}
+          CLAUDE_CODE_OAUTH_TOKEN: ${{ secrets.CLAUDE_CODE_OAUTH_TOKEN }}
           CLAUDE_PROMPT: ${{ inputs.prompt }}
         run: |
-          token=$(printf '%s' "$CLAUDE_CODE_OAUTH_TOKEN_RAW" | tr -d '[:space:]')
-          echo "::add-mask::$token"
-          export CLAUDE_CODE_OAUTH_TOKEN="$token"
-          echo "Token length after stripping whitespace: ${#token}"
           bash ./scripts/run-claude.sh
